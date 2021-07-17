@@ -63,8 +63,11 @@ public class UniformManager {
 	}
 
 	/**
-	 * Parses the shader text for uniforms.
-	 * @param program the shader to parse
+	 * Gets the uniforms of a program.
+	 * Stores the uniforms in a map with their
+	 * name as the key.
+	 *
+	 * @param programId the program to process
 	 */
 	public void getUniformsFrom(int programId) {
 		try (MemoryStack stack = MemoryStack.stackPush()) {
