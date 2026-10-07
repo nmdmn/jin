@@ -1,0 +1,79 @@
+import * as Dat from "dat.gui";
+import * as Three from "three";
+
+import { App, UI } from "./app.js";
+
+import * as Shaders from "./shaders/*/{v,f}_*.glsl";
+
+function getShader(name, type) {
+  return Shaders[name][type][name];
+}
+
+//const ui = {};
+
+export default class Shadertoy {
+  constructor(canvas) {
+    //this.gui = new UI(ui);
+
+    const mouse = new Three.Vector4(0., 0., -1., 0.);
+
+    const camera = new Three.OrthographicCamera(-1, 1, 1, -1, 0, 1)
+    const app = new App(canvas, camera, 0);
+    const uniforms = {
+      iTime: { value: 0 },
+      iTimeDelta: { value: 0 },
+      iResolution: { value: new Three.Vector3(window.innerWidth, window.innerHeight, 1.) },
+      iMouse: { value: mouse },
+    };
+    const geometry = new Three.PlaneGeometry(2, 2);
+    const shaderName = "basic";
+    const material = new Three.ShaderMaterial({
+      side: Three.FrontSide,
+      blending: Three.AdditiveBlending,
+      clipping: true,
+      fog: false,
+      wireframe: false,
+      transparent: false,
+      depthTest: false,
+      depthWrite: false,
+      extensions: {
+        derivates: "#extensions GL_OES_standard_derivates : enable",
+        fragDepth: false,
+        drawBuffers: false,
+        haderTextureLOD: false,
+      },
+      uniforms: uniforms,
+      vertexShader: getShader(shaderName, "v"),
+      fragmentShader: getShader(shaderName, "f"),
+    });
+
+    const mesh = new Three.Mesh(geometry, material);
+    app.scene.add(mesh);
+
+    app.addKeydownCallbacks((event) => {
+      switch (event.key) {
+        case "Escape":
+          Dat.GUI.toggleHide();
+          break;
+      }
+    });
+
+    window.addEventListener("mousemove", (event) => {
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      mouse.z = 1.;
+    });
+    window.addEventListener("mouseout", (event) => {
+      mouse.z = -1.;
+    });
+
+    app.addUpdateCallback((deltaTime, elapsedTime) => {
+      uniforms.iTime.value = elapsedTime;
+      uniforms.iTimeDelta.value = deltaTime;
+      uniforms.iResolution.value = new Three.Vector2(window.innerWidth, window.innerHeight, 1.);
+      uniforms.iMouse.value.copy(mouse);
+    });
+
+    app.start();
+  }
+}

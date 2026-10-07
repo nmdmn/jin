@@ -1,0 +1,30 @@
+{
+  "name": "abstract",
+  "version": "0.1.0",
+  "description": "audiovisual entertainment",
+  "repository": "https://github.com/nmdmn/abstract",
+  "author": "nmd",
+  "license": "MIT",
+  "scripts": {
+    "start": "parcel src/index.html",
+    "build": "rm -rf rel && parcel build --dist-dir rel src/index.html --no-cache",
+    "clean": "rm -rf rel dist",
+    "clearup": "rm -rf node_modules rel dist .parcel-cache"
+  },
+  "devDependencies": {
+    "@parcel/resolver-glob": "^2.16.4",
+    "@parcel/transformer-glsl": "^2.16.4",
+    "@parcel/transformer-sass": "^2.14.4",
+    "buffer": "^5.5.0||^6.0.0",
+    "parcel": "^2.14.4",
+    "process": "^0.11.10",
+    "sass-migrator": "^2.3.1",
+    "yarn-upgrade-all": "^0.8.1"
+  },
+  "dependencies": {
+    "@tweenjs/tween.js": "^25.0.0",
+    "dat.gui": "^0.7.9",
+    "simplex-noise": "^4.0.3",
+    "three": "^0.186.1"
+  }
+}

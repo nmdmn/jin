@@ -1,0 +1,33 @@
+precision highp float;
+
+uniform float iTime;
+uniform float iTimeDelta;
+uniform vec3 iResolution;
+uniform vec4 iMouse;
+
+varying vec2 vUv;
+
+////////////////////////////////////////////////////////////////////////////////
+// https://www.shadertoy.com/........... ///////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+void mainImage(out vec4 fragColor, in vec2 fragCoord) {
+  vec2 uv = (fragCoord * 2. - iResolution.xy) / iResolution.y;
+
+  float d = length(uv);
+
+  d = abs(d);
+  d = smoothstep(.495, .5 , d);
+
+  fragColor = vec4(vec3(d), 1.);
+}
+////////////////////////////////////////////////////////////////////////////////
+//// ±!@#$%^&*()_+ /////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+void main() {
+  //mimic shadertoy fragCoord input vector
+  vec2 fragCoord = vUv * iResolution.xy;
+  vec4 fragColor;
+  mainImage(fragColor, fragCoord);
+  gl_FragColor = vec4(fragColor.rgb, 1.);
+}
