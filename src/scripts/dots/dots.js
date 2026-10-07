@@ -41,18 +41,18 @@ const ui = {
 
 export default class Dots {
   constructor(canvas) {
-    this.gui = new UI(ui);
+    const gui = new UI(ui);
 
-    this.camera = new Three.PerspectiveCamera(33, window.innerWidth / window.innerHeight, .1, 1000.);
-    this.camera.lookAt(new Vector3(0, 0, 0));
-    this.camera.position.copy(new Vector3(0, 0, 111));
-    this.app = new App(canvas, this.camera, 0);
+    const camera = new Three.PerspectiveCamera(33, window.innerWidth / window.innerHeight, .1, 1000.);
+    camera.lookAt(new Vector3(0, 0, 0));
+    camera.position.copy(new Vector3(0, 0, 111));
+    const app = new App(canvas, camera, 0);
 
-    this.box = new Box(this.app, ui);
-    this.grid = new Grid(this.app, ui);
-    this.grid.mesh.position.copy(new Vector3(0, 0, -10));
+    const box = new Box(app, ui);
+    const grid = new Grid(app, ui);
+    grid.mesh.position.copy(new Vector3(0, 0, -10));
 
-    this.app.addKeydownCallbacks((event) => {
+    app.addKeydownCallbacks((event) => {
       switch (event.key) {
         case "Escape":
           Dat.GUI.toggleHide();
@@ -60,14 +60,14 @@ export default class Dots {
       }
     });
 
-    this.app.addUpdateCallback(() => {
-      this.app.renderer.toneMappingExposure = Math.pow(ui.exposure.value, 4);
-      //this.app.bloomPass.threshold = ui.threshold.value;
-      //this.app.bloomPass.strength = ui.strength.value;
-      //this.app.bloomPass.radius = ui.radius.value;
+    app.addUpdateCallback(() => {
+      //app.renderer.toneMappingExposure = Math.pow(ui.exposure.value, 4);
+      //app.bloomPass.threshold = ui.threshold.value;
+      //app.bloomPass.strength = ui.strength.value;
+      //app.bloomPass.radius = ui.radius.value;
     });
 
-    this.app.start();
+    app.start();
   }
 }
 
