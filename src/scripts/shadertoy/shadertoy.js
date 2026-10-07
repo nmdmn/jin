@@ -1,7 +1,7 @@
 import * as Dat from "dat.gui";
 import * as Three from "three";
 
-import { App, UI } from "./app.js";
+import { App, UI } from "../app.js";
 
 import * as Shaders from "./shaders/*/{v,f}_*.glsl";
 
