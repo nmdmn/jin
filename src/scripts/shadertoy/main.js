@@ -26,7 +26,7 @@ export default class Shadertoy {
       iMouse: { value: mouse },
     };
     const geometry = new Three.PlaneGeometry(2, 2);
-    const shaderName = "basic";
+    const shaderName = "raymarch";
     const material = new Three.ShaderMaterial({
       side: Three.FrontSide,
       blending: Three.AdditiveBlending,
