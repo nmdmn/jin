@@ -77,3 +77,7 @@ export default class Shadertoy {
     app.start();
   }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  new Shadertoy("canvas");
+});
