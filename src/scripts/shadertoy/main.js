@@ -1,7 +1,7 @@
 import * as Dat from "dat.gui";
 import * as Three from "three";
 
-import { App, UI } from "../app.js";
+import { App } from "../app.js";
 
 import * as Shaders from "./shaders/*/{v,f}_*.glsl";
 
@@ -9,11 +9,9 @@ function getShader(name, type) {
   return Shaders[name][type][name];
 }
 
-//const ui = {};
 
 export default class Shadertoy {
   constructor(canvas) {
-    //this.gui = new UI(ui);
 
     const mouse = new Three.Vector4(0., 0., -1., 0.);
 
@@ -26,7 +24,7 @@ export default class Shadertoy {
       iMouse: { value: mouse },
     };
     const geometry = new Three.PlaneGeometry(2, 2);
-    const shaderName = "raymarch";
+    const shaderName = "basic";
     const material = new Three.ShaderMaterial({
       side: Three.FrontSide,
       blending: Three.AdditiveBlending,
