@@ -45,9 +45,9 @@ export class App {
     this.renderer.setClearColor(0x000000);
 
     this.composer.addPass(this.renderPass);
-    pre.map((element) => { this.composer.addPass(element) });
+    if (pre != null) pre.map((element) => { this.composer.addPass(element) });
     this.composer.addPass(this.outputPass);
-    post.map((element) => { this.composer.addPass(element) });
+    if (pre != null) post.map((element) => { this.composer.addPass(element) });
   }
 
   addResizeCallback(resizeCallback) { this.resizeCallbacks.push(resizeCallback); }
