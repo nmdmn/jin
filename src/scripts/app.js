@@ -1,5 +1,8 @@
 import * as Dat from "dat.gui";
 import * as Three from "three";
+import { OutputPass } from "three/examples/jsm/postprocessing/OutputPass.js";
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 
 export class App {
   constructor(canvas, camera, captureRate) {
@@ -14,7 +17,14 @@ export class App {
       antialias: true,
       powerPreference: "high-performance"
     });
+
+    this.composer = new EffectComposer(this.renderer);
+
     this.onResize();
+
+    this.isComposer = false;
+    this.renderPass = new RenderPass(this.scene, this.camera);
+    this.outputPass = new OutputPass();
 
     this.timer = new Three.Timer();
     this.resizeCallbacks = [];
@@ -24,6 +34,20 @@ export class App {
     this.captureRate = captureRate;
     this.captureFrame = 0;
 
+  }
+
+  addPasses(pre, post) {
+    this.isComposer = true;
+
+    this.renderer.toneMapping = Three.ACESFilmicToneMapping;
+    //this.renderer.toneMapping = Three.ReinhardToneMapping;
+    this.renderer.outputColorSpace = Three.SRGBColorSpace;
+    this.renderer.setClearColor(0x000000);
+
+    this.composer.addPass(this.renderPass);
+    if (pre != null) pre.map((element) => { this.composer.addPass(element) });
+    this.composer.addPass(this.outputPass);
+    if (pre != null) post.map((element) => { this.composer.addPass(element) });
   }
 
   addResizeCallback(resizeCallback) { this.resizeCallbacks.push(resizeCallback); }
@@ -39,6 +63,7 @@ export class App {
     this.camera.updateProjectionMatrix();
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.composer.setSize(window.innerWidth, window.innerHeight);
   }
 
   onKey(event) {
@@ -61,7 +86,11 @@ export class App {
       this.updateCallbacks[callback](deltaTime, elapsedTime);
     }
 
-    this.renderer.render(this.scene, this.camera);
+    if (this.isComposer) {
+      this.composer.render();
+    } else {
+      this.renderer.render(this.scene, this.camera);
+    }
     if (this.captureRate != 0) {
       var r = new XMLHttpRequest();
       r.open("POST", "http://localhost:2345/" + this.captureFrame, true);

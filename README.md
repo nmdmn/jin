@@ -1,6 +1,8 @@
-# abstract
+# jin
 
-### audiovisual entertainment
+3D Threejs Sandbox
+
+**Set the imported JS file in index.html to change project**
 
 ## usage
 

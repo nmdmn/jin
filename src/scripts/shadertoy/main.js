@@ -1,7 +1,8 @@
 import * as Dat from "dat.gui";
 import * as Three from "three";
+import { FXAAPass } from 'three/examples/jsm/postprocessing/FXAAPass.js';
 
-import { App, UI } from "./app.js";
+import { App } from "../app.js";
 
 import * as Shaders from "./shaders/*/{v,f}_*.glsl";
 
@@ -9,16 +10,18 @@ function getShader(name, type) {
   return Shaders[name][type][name];
 }
 
-//const ui = {};
 
 export default class Shadertoy {
   constructor(canvas) {
-    //this.gui = new UI(ui);
 
     const mouse = new Three.Vector4(0., 0., -1., 0.);
 
     const camera = new Three.OrthographicCamera(-1, 1, 1, -1, 0, 1)
     const app = new App(canvas, camera, 0);
+
+    const fxaaPass = new FXAAPass();
+    //app.addPasses(null, [fxaaPass]) //NOTE this shit improves FPS, why?
+
     const uniforms = {
       iTime: { value: 0 },
       iTimeDelta: { value: 0 },
@@ -26,7 +29,7 @@ export default class Shadertoy {
       iMouse: { value: mouse },
     };
     const geometry = new Three.PlaneGeometry(2, 2);
-    const shaderName = "basic";
+    const shaderName = "ascend"
     const material = new Three.ShaderMaterial({
       side: Three.FrontSide,
       blending: Three.AdditiveBlending,
@@ -77,3 +80,7 @@ export default class Shadertoy {
     app.start();
   }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  new Shadertoy("canvas");
+});
