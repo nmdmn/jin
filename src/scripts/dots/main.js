@@ -1,6 +1,9 @@
 import * as Dat from "dat.gui";
 import * as Three from "three";
 import { Vector3 } from "three";
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { SSAOPass } from 'three/examples/jsm/postprocessing/SSAOPass.js';
+import { FXAAPass } from 'three/examples/jsm/postprocessing/FXAAPass.js';
 
 import { App, UI } from "../app.js";
 import { Box } from "./box";
@@ -46,7 +49,14 @@ export default class Dots {
     const camera = new Three.PerspectiveCamera(33, window.innerWidth / window.innerHeight, .1, 1000.);
     camera.lookAt(new Vector3(0, 0, 0));
     camera.position.copy(new Vector3(0, 0, 111));
+
+
     const app = new App(canvas, camera, 0);
+
+    const bloomPass = new UnrealBloomPass(new Three.Vector2(window.innerWidth, window.innerHeight), 1.5, .4, .85);
+    const ssaoPass = new SSAOPass(app.scene, camera, window.innerWidth, window.innerHeight);
+    const fxaaPass = new FXAAPass();
+    app.addPasses([bloomPass], [ssaoPass, fxaaPass]);
 
     const box = new Box(app, ui);
     const grid = new Grid(app, ui);
@@ -61,10 +71,10 @@ export default class Dots {
     });
 
     app.addUpdateCallback(() => {
-      //app.renderer.toneMappingExposure = Math.pow(ui.exposure.value, 4);
-      //app.bloomPass.threshold = ui.threshold.value;
-      //app.bloomPass.strength = ui.strength.value;
-      //app.bloomPass.radius = ui.radius.value;
+      app.renderer.toneMappingExposure = Math.pow(ui.exposure.value, 4);
+      bloomPass.threshold = ui.threshold.value;
+      bloomPass.strength = ui.strength.value;
+      bloomPass.radius = ui.radius.value;
     });
 
     app.start();
