@@ -54,3 +54,7 @@ node capture.js
 ```sh
 ffmpeg -r 30 -i capture/%05d.png -y capture.webm
 ```
+
+## TODO
+
+* inject the commonly used uniforms into the shaders, do not let all component handle this seperately
